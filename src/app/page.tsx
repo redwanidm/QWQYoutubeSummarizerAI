@@ -2,11 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { Sparkles } from 'lucide-react';
-
 import VideoSummaryResult from './components/video-summary-result';
 import Informations from './components/informations';
-import Layout from './pages/layout';
 
+
+import Layout from './pages/layout';
 type SummaryResult = {
   summary: string;
   videoTitle: string;
@@ -14,6 +14,7 @@ type SummaryResult = {
   videoThumbnail: string;
   keyPoints: string[];
   quotes: string[];
+  videoLink:string;
 };
 
 export default function Home() {
@@ -25,9 +26,15 @@ export default function Home() {
     thumbnail: string;
     duration: string;
   } | null>(null);
+
+  const extractVideoId = (url: string) => {
+    const match = url.match(/[?&]v=([^&]+)/) || url.match(/youtu\.be\/(.+)/);
+    return match ? match[1] : null;
+  };
+
   const API_KEY = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
 
-  function convertYoutubeDuration(duration) {
+  function convertYoutubeDuration(duration : string) {
     // Regular expression to parse YouTube duration format
     const match = duration.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
     
@@ -99,6 +106,57 @@ export default function Home() {
     }
   }, [youtubeUrl]); // Dependency array ensures this runs when URL changes
 
+
+
+
+
+  async function getTranscriptText(videoId: string): Promise<string | undefined> {
+    try {
+      const response = await fetch(`/api/transcript?videoId=${videoId}`);
+      
+      if (!response.ok) {
+        throw new Error('Transcript fetch failed');
+      }
+  
+      const data = await response.json();
+      return data.transcript;
+    } catch (error) {
+      console.error('Error fetching transcript:', error);
+      return undefined;
+    }
+  }
+
+  async function GeminiSummarize(youtubeUrl: string): Promise<SummaryResult | null> {
+    const videoId = extractVideoId(youtubeUrl);
+
+    if (!videoId) {
+      console.error('Invalid video ID');
+      return null;
+    }
+
+    try {
+      const transcript = await getTranscriptText(videoId);
+      
+
+      // Here you would typically send the transcript to your summarization API
+      // For now, returning a placeholder result
+      return {
+        videoLink: youtubeUrl,
+        summary: "Placeholder summary based on transcript",
+        videoTitle: videoData?.title || "Video Title",
+        videoDuration: videoData?.duration ? convertYoutubeDuration(videoData.duration) : "00:00",
+        videoThumbnail: videoData?.thumbnail || "",
+        keyPoints: ["Key point 1", "Key point 2"],
+        quotes: ["Quote 1", "Quote 2"]
+      };
+    } catch (error) {
+      console.error('Error in summarization:', error);
+      return null;
+    }
+  }
+
+
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -107,34 +165,20 @@ export default function Home() {
       alert("Please enter a valid YouTube URL");
       return;
     }
-
-    setIsLoading(true);
     setSummaryResult(null);
-
-    // Simulated summary generation
-    setTimeout(() => {
-      setSummaryResult({
-        videoLink: youtubeUrl,
-        summary: "This is a placeholder summary of the YouTube video. In a real application, this would be the AI-generated summary of the video content based on the URL provided and the selected video type.",
-        videoTitle: videoData.title,
-        videoDuration: convertYoutubeDuration(videoData.duration),
-        videoThumbnail: videoData.thumbnail,
-        keyPoints: [
-          "DaisyUI simplifies Tailwind CSS by providing pre-built components",
-          "React and DaisyUI together create a powerful combination for web development",
-          "You can customize DaisyUI themes to match your brand",
-          "Component-based architecture improves code reusability",
-          "The tabs component makes organizing content easier"
-        ],
-        quotes: [
-          "DaisyUI is like having a design system built right into Tailwind CSS",
-          "The best way to learn is by building actual projects",
-          "Component libraries save developers countless hours of styling work"
-        ]
-      });
+    setIsLoading(true);
+    
+    try {
+      const summary = await GeminiSummarize(youtubeUrl);
+      setSummaryResult(summary);
+    } catch (error) {
+      console.error('Summarization error:', error);
+    } finally {
       setIsLoading(false);
-    }, 3000);
+    }
   };
+
+  
 
   return (
     <Layout>
