@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Sparkles } from 'lucide-react';
 import VideoSummaryResult from './components/video-summary-result';
 import Informations from './components/informations';
+import { mateSc } from '@/app/ui/fonts';
 
 
 import Layout from './pages/layout';
@@ -32,7 +33,28 @@ export default function Home() {
     return match ? match[1] : null;
   };
 
-  const API_KEY = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
+  const YOUTUBE_API_KEY = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
+  const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+
+  const parseSummaryText = (summaryText: string): SummaryResult | null => {
+    try {
+      // Remove everything before the first '{' and after the last '}'
+      const jsonStartIndex = summaryText.indexOf('{');
+      const jsonEndIndex = summaryText.lastIndexOf('}') + 1;
+      
+      if (jsonStartIndex === -1 || jsonEndIndex === -1) {
+        throw new Error('Could not find valid JSON');
+      }
+  
+      const cleanedText = summaryText.slice(jsonStartIndex, jsonEndIndex).trim();
+      console.log(cleanedText)
+      // Parse the cleaned JSON
+      return JSON.parse(cleanedText);
+    } catch (error) {
+      console.error('Error parsing summary:', error);
+      return null;
+    }
+  };
 
   function convertYoutubeDuration(duration : string) {
     // Regular expression to parse YouTube duration format
@@ -48,7 +70,7 @@ export default function Home() {
     const seconds = match[3] ? parseInt(match[3]) : 0;
     
     // Pad single-digit numbers with leading zero
-    const pad = (num) => num.toString().padStart(2, '0');
+    const pad = (num:number) => num.toString().padStart(2, '0');
     
     // Construct the time string based on hours
     if (hours === 0) {
@@ -78,7 +100,7 @@ export default function Home() {
         return;
       }
       
-      const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${videoId}&key=${API_KEY}`;
+      const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails&id=${videoId}&key=${YOUTUBE_API_KEY}`;
       
       try {
         const response = await fetch(apiUrl);
@@ -136,18 +158,69 @@ export default function Home() {
 
     try {
       const transcript = await getTranscriptText(videoId);
-      
 
-      // Here you would typically send the transcript to your summarization API
-      // For now, returning a placeholder result
+      
+      if (!GEMINI_API_KEY) {
+        throw new Error('Gemini API key is not configured');
+      }
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-8b:generateContent?key=${GEMINI_API_KEY}`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{
+              text: `Analyze the following video transcript and provide a structured summary:
+
+Video Transcript: ${transcript}
+
+Instructions:
+1. Summary: Write a concise, 3-4 sentence overview of the video's main content.
+2. Key Points: Identify the 4-5 most important takeaways or insights.
+3. Quotes: Select 3 memorable quotes that best represent the video's core message.
+
+Required Output Format (MUST follow exactly):
+{
+  "summary": "Concise video overview",
+  "keyPoints": [
+    "Key point 1",
+    "Key point 2",
+    "Key point 3"
+  ],
+  "quotes": [
+    "Memorable quote 1",
+    "Memorable quote 2"
+  ]
+}
+
+IMPORTANT: Respond ONLY with the JSON object. No additional text or explanations.`
+            }]
+          }],
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 512
+          }
+        })
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Gemini API request failed with status: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      const summaryText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      const parsedSummary = parseSummaryText(summaryText);
+      
+ 
       return {
         videoLink: youtubeUrl,
-        summary: "Placeholder summary based on transcript",
+        summary: parsedSummary?.summary || "",
         videoTitle: videoData?.title || "Video Title",
         videoDuration: videoData?.duration ? convertYoutubeDuration(videoData.duration) : "00:00",
         videoThumbnail: videoData?.thumbnail || "",
-        keyPoints: ["Key point 1", "Key point 2"],
-        quotes: ["Quote 1", "Quote 2"]
+        keyPoints: parsedSummary?.keyPoints || [""],
+        quotes: parsedSummary?.quotes || [""],
       };
     } catch (error) {
       console.error('Error in summarization:', error);
@@ -185,14 +258,14 @@ export default function Home() {
       <header className="mb-12 text-center">
         <div className="mx-auto mb-4">
           <div className="inline-block px-4 py-1.5 bg-primary/10 text-primary text-sm font-medium rounded-full animate-fade-in">
-            Smart Video Summaries
+            <p className='mt-1'>Smart Video Summaries </p>
           </div>
         </div>
-        <h1 className="mb-2 text-3xl font-bold">YouTube Summarizer</h1>
+        <h1 className={`mb-2 text-3xl font-bold  ${mateSc.className} antialiased`}>YouTube Summarizer</h1>
         <p className="mx-auto max-w-md text-base-content/70">Get concise summaries of any YouTube video in seconds</p>
       </header>
 
-      <div className="card mx-auto mb-10 bg-base-100 shadow-xl">
+      <div className="card mx-auto mb-10 bg-base-100 ">
         <div className="bg-gradient-to-r from-primary rounded-2xl to-secondary p-1">
           <div className="card-body bg-base-100 rounded-xl p-6">
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -212,7 +285,7 @@ export default function Home() {
                         value={youtubeUrl}
                         onChange={(e) => setYoutubeUrl(e.target.value)}
                         required
-                        className="input input-bordered w-full font-sans"
+                        className="input input-bordered w-full font-sans rounded-r-none"
                       />
                     </div>
                   </div>
@@ -221,7 +294,7 @@ export default function Home() {
                 <div className="sm:w-48 md:w-72 mt-4 sm:mt-0">
                   <button
                     type="submit"
-                    className="btn btn-primary w-full py-3 text-base rounded font-medium"
+                    className="btn btn-primary w-full py-3 text-base rounded rounded-l-none font-medium"
                     disabled={isLoading || !videoData}
                   >
                     {isLoading ? (

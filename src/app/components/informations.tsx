@@ -11,7 +11,7 @@ class Informations extends React.Component {
                 <Sparkles className="h-6 w-6" />
               </div>
               <h3 className="mb-2 text-lg font-medium">AI-Powered</h3>
-              <p className="text-sm text-base-content/70">Advanced AI models extract the key points from any video</p>
+              <p className="text-sm text-base-content/70">AI models extract the key points from any video</p>
             </div>
   
             <div className="flex flex-col items-center text-center">
@@ -27,7 +27,7 @@ class Informations extends React.Component {
                 <Code className="h-6 w-6" />
               </div>
               <h3 className="mb-2 text-lg font-medium">Customizable</h3>
-              <p className="text-sm text-base-content/70">Select the video type to get more relevant summaries</p>
+              <p className="text-sm text-base-content/70">Select the video type to get more relevant summaries (soon)</p>
             </div>
           </div> );
     }

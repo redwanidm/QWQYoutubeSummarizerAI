@@ -1,7 +1,6 @@
 // src/components/Layout.tsx
 import React from 'react';
 import Header from '../components/header'; // Assuming you have a Header component
-
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <div className="min-h-screen bg-base-200 pb-20">
