@@ -217,7 +217,7 @@ const VideoSummaryResult = ({
     <div className="card-body p-4 max-h-full overflow-auto">
       <div className="mb-2 flex flex-col sm:flex-row sm:items-center justify-between">
         <h3 className="text-md font-medium mb-2 sm:mb-0">🎬 Transcript Breakdown</h3>
-        <div className="text-xs text-neutral-content/70 text-center sm:text-right">
+        <div className="text-xs text-base-content/70 text-center sm:text-right">
           Click on a section to expand
         </div>
       </div>
@@ -229,12 +229,12 @@ const VideoSummaryResult = ({
               <input type="checkbox" className="peer" />
               <div className="collapse-title flex flex-col sm:flex-row items-start sm:items-center justify-between">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full">
-                  <span className={`badge badge-primary badge-sm flex items-center mr-1 mb-2 sm:mb-0 min-w-[110px] ${mateSc?.className}`}>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <p className='hover:underline '>{section.startTime} - {section.endTime}</p>
-                  </span>
+                <span className={`badge badge-primary badge-sm flex items-center mr-1 mb-2 sm:mb-0 w-fit px-3 ${mateSc?.className}`}>
+  <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 md:mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+  <p className='hover:underline whitespace-nowrap'>{section.startTime} - {section.endTime}</p>
+</span>
                   <span title={section.sectionTitle} className={`text-sm text-base-content/80 break-words w-full  ${mateSc?.className}`}>
                     {section.sectionTitle}
                   </span>

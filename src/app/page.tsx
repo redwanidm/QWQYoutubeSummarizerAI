@@ -43,7 +43,10 @@ export default function Home() {
   } | null>(null);
 
   const extractVideoId = (url: string) => {
-    const match = url.match(/[?&]v=([^&]+)/) || url.match(/youtu\.be\/(.+)/);
+    const match = 
+      url.match(/[?&]v=([^&]+)/) || 
+      url.match(/youtu\.be\/([^?&]+)(\?si=[^&]+)?/) ||
+      url.match(/youtu\.be\/([^?&]+)/);
     return match ? match[1] : null;
   };
 
@@ -73,7 +76,6 @@ export default function Home() {
       }
   
       const cleanedText = summaryText.slice(jsonStartIndex, jsonEndIndex).trim();
-      console.log(cleanedText)
       // Parse the cleaned JSON
       return JSON.parse(cleanedText);
     } catch (error) {
@@ -114,12 +116,15 @@ export default function Home() {
   // New useEffect to handle URL changes
   useEffect(() => {
     const extractVideoId = (url: string) => {
-      const match = url.match(/[?&]v=([^&]+)/) || url.match(/youtu\.be\/(.+)/);
+      const match = 
+        url.match(/[?&]v=([^&]+)/) || 
+        url.match(/youtu\.be\/([^?]+)/);
       return match ? match[1] : null;
     };
 
     const fetchVideoInfo = async () => {
       const videoId = extractVideoId(youtubeUrl);
+      console.log("VIDEO ID",videoId)
       if (!videoId) {
         // Optionally clear previous video data if URL is invalid
         setVideoData(null);
@@ -397,7 +402,7 @@ IMPORTANT:
                   <button
                     type="submit"
                     className="btn btn-primary w-full py-3 text-base rounded rounded-l-none font-medium"
-                    
+                    disabled={isLoading || !videoData}
                   >
                     {isLoading ? (
                       <>
