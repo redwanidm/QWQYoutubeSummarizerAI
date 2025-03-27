@@ -191,6 +191,18 @@ export default function Home() {
       if (!GEMINI_API_KEY) {
         throw new Error('Gemini API key is not configured');
       }
+
+      if (!transcript) {
+        return({
+        videoLink: youtubeUrl,
+        summary: "<p className=\"text-error\">Error: The transcripter api is disabled ask the developper to enable it </p>",
+        videoTitle: videoData?.title || "Video Title",
+        videoDuration: videoData?.duration ? convertYoutubeDuration(videoData.duration) : "00:00",
+        videoThumbnail: videoData?.thumbnail || "",
+        keyPoints:  [""],
+        quotes:  [""],
+      })
+      }
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-8b:generateContent?key=${GEMINI_API_KEY}`, {
               method: 'POST',
               headers: {
@@ -230,7 +242,8 @@ IMPORTANT: Respond ONLY with the JSON object. No additional text or explanations
             maxOutputTokens: 512
           }
         })
-      });
+      }); 
+    
   
       if (!response.ok) {
         throw new Error(`Gemini API request failed with status: ${response.status}`);
