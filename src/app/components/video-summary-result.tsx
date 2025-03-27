@@ -96,7 +96,7 @@ const VideoSummaryResult = ({
         {/* Divider */}
         <div className="divider divider-horizontal hidden md:flex"></div>
         
-        <div className="w-full md:w-2/3 px-0 pt-4 sm:p-4">
+        <div className="w-full md:w-2/3 p-0 sm:p-4">
           {/* Tab buttons */}
           <div role="tablist" className={`tabs tabs-boxed mb-4 w-full flex justify-around ${mateSc?.className} antialiased`}>
             <a 
@@ -142,8 +142,8 @@ const VideoSummaryResult = ({
                   : 'opacity-0 translate-x-8 pointer-events-none'
               }`}
             >
-              <div className="card bg-base-200 rounded-none md:rounded-selector">
-                <div className="card-body p-4 max-h-full overflow-auto  ">
+              <div className="card bg-base-200">
+                <div className="card-body p-4 max-h-full overflow-auto">
                   <div className="mb-2 flex items-center">
                     <h3 className="text-md font-medium">📝 Summary Overview</h3>
                   </div>
@@ -160,7 +160,7 @@ const VideoSummaryResult = ({
                   : 'opacity-0 translate-x-8 pointer-events-none'
               }`}
             >
-              <div className="card bg-base-200 rounded-none md:rounded-selector">
+              <div className="card bg-base-200">
                 <div className="card-body p-4 max-h-full overflow-auto">
                   <div className="mb-2 flex items-center">
                     <h3 className="text-md font-medium">🔑 Main Takeaways</h3>
@@ -185,7 +185,7 @@ const VideoSummaryResult = ({
                   : 'opacity-0 translate-x-8 pointer-events-none'
               }`}
             >
-              <div className="card bg-base-200 rounded-none md:rounded-selector">
+              <div className="card bg-base-200">
                 <div className="card-body p-4 max-h-full overflow-auto">
                   <div className="mb-2 flex items-center">
                     <h3 className="text-md font-medium">💬 Notable Quotes</h3>
@@ -213,7 +213,7 @@ const VideoSummaryResult = ({
       : 'opacity-0 translate-x-8 pointer-events-none'
   }`}
 >
-  <div className="card bg-base-200 rounded-none md:rounded-selector">
+  <div className="card bg-base-200">
     <div className="card-body p-4 max-h-full overflow-auto">
       <div className="mb-2 flex flex-col sm:flex-row sm:items-center justify-between">
         <h3 className="text-md font-medium mb-2 sm:mb-0">🎬 Transcript Breakdown</h3>
@@ -255,7 +255,7 @@ const VideoSummaryResult = ({
           ))}
         </div>
       ) : (
-        <div className="text-center py-6 text-neutral-content">
+        <div className="text-center py-6 text-base-content">
           <p>No transcript sections available for this video.</p>
         </div>
       )}
