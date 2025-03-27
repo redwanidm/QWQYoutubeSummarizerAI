@@ -35,7 +35,7 @@ export default function Home() {
 
   const YOUTUBE_API_KEY = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
   const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-  // const API_BASE_URL = process.env.NEXT_PUBLIC_NGROK_URL;
+  const API_BASE_URL = process.env.NEXT_PUBLIC_NGROK_URL;
   const parseSummaryText = (summaryText: string): SummaryResult | null => {
     try {
       // Remove everything before the first '{' and after the last '}'
@@ -132,8 +132,8 @@ export default function Home() {
     try {
       console.log(`Attempting to fetch transcript for video ID: ${videoId}`);
       
-      const ngrokUrl = 'https://e8bf-41-96-31-165.ngrok-free.app';  // Replace with current URL
-      const fullUrl = `${ngrokUrl}/transcript/?video_id=${videoId}`;
+        // Replace with current URL
+      const fullUrl = `${API_BASE_URL}/transcript/?video_id=${videoId}`;
   
       console.log('Full Request URL:', fullUrl);
   
