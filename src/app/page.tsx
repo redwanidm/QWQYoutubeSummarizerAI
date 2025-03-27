@@ -8,6 +8,19 @@ import { mateSc } from '@/app/ui/fonts';
 
 
 import Layout from './pages/layout';
+interface TranscriptSection {
+  startTime: string;
+  endTime: string;
+  summary: string;
+  sectionTitle:string; 
+}
+
+interface RawTranscriptEntry {
+  text: string;
+  start: number;
+  duration: number;
+}
+
 type SummaryResult = {
   summary: string;
   videoTitle: string;
@@ -16,6 +29,7 @@ type SummaryResult = {
   keyPoints: string[];
   quotes: string[];
   videoLink:string;
+  transcriptSections:TranscriptSection[]
 };
 
 export default function Home() {
@@ -36,6 +50,18 @@ export default function Home() {
   const YOUTUBE_API_KEY = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
   const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
   const API_BASE_URL = process.env.NEXT_PUBLIC_NGROK_URL;
+
+  function formatTimestamp(seconds: number): string {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+    
+    if (hours > 0) {
+      return `${hours}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+    }
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+  }
+
   const parseSummaryText = (summaryText: string): SummaryResult | null => {
     try {
       // Remove everything before the first '{' and after the last '}'
@@ -162,7 +188,10 @@ export default function Home() {
         }
   
         console.log("Transcript fetched successfully:", data.transcript.slice(0, 200) + '...');
-        return data.transcript;
+        return {
+          transcript: data.transcript,
+          rawTranscript: data.raw_transcript
+        };
   
       } catch (parseError) {
         console.error('JSON Parsing Error:', parseError);
@@ -185,22 +214,32 @@ export default function Home() {
     }
 
     try {
-      const transcript = await getTranscriptText(videoId);
+      const transcriptData = await getTranscriptText(videoId);
 
+      if (transcriptData) {
+        // Process raw transcript to include formatted timestamps
+        const processedTranscript = transcriptData.rawTranscript.map((entry: RawTranscriptEntry) => ({
+          ...entry,
+          formattedStart: formatTimestamp(entry.start),
+          formattedEnd: formatTimestamp(entry.start + entry.duration)
+        }));
+        console.log('Processed transcript:', processedTranscript[0]);
+      }
       
       if (!GEMINI_API_KEY) {
         throw new Error('Gemini API key is not configured');
       }
 
-      if (!transcript) {
+      if (!transcriptData) {
         return({
         videoLink: youtubeUrl,
-        summary: "<p className=\"text-error\">Error: The transcripter api is disabled ask the developper to enable it </p>",
+        summary: "ERROR: The transcripter api is disabled ask the developper to enable it",
         videoTitle: videoData?.title || "Video Title",
         videoDuration: videoData?.duration ? convertYoutubeDuration(videoData.duration) : "00:00",
         videoThumbnail: videoData?.thumbnail || "",
         keyPoints:  [""],
         quotes:  [""],
+        transcriptSections : []
       })
       }
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-8b:generateContent?key=${GEMINI_API_KEY}`, {
@@ -213,12 +252,19 @@ export default function Home() {
             parts: [{
               text: `Analyze the following video transcript and provide a structured summary:
 
-Video Transcript: ${transcript}
+Video Transcript: ${transcriptData.transcript}
+
+Raw Transcript Data: ${JSON.stringify(transcriptData.rawTranscript.map((entry: RawTranscriptEntry) => ({
+  text: entry.text,
+  startTime: formatTimestamp(entry.start),
+  endTime: formatTimestamp(entry.start + entry.duration)
+})))}
 
 Instructions:
 1. Summary: Write a concise, 3-4 sentence overview of the video's main content.
 2. Key Points: Identify the 4-5 most important takeaways or insights.
 3. Quotes: Select 3 memorable quotes that best represent the video's core message.
+4. Transcript Sections: Break down the transcript into 3-15 logical sections, using the raw transcript timestamps.
 
 Required Output Format (MUST follow exactly):
 {
@@ -231,15 +277,28 @@ Required Output Format (MUST follow exactly):
   "quotes": [
     "Memorable quote 1",
     "Memorable quote 2"
+  ],
+  "transcriptSections": [
+    {
+      "startTime": "MM:SS",
+      "endTime": "MM:SS",
+      "summary": "Brief explanation of this section's content 4-5 sentences",
+      "sectionTitle" : "1 sentence that represents what happened in this section"
+    }
   ]
 }
 
-IMPORTANT: Respond ONLY with the JSON object. No additional text or explanations.`
+IMPORTANT: 
+- Respond ONLY with the JSON object. No additional text or explanations.
+- Each transcriptSection MUST cover a continuous portion of the video
+- The sections together MUST cover the ENTIRE video duration
+- Format timestamps as MM:SS and for videos duration more than an hour use HH:MM:SS
+- For longer videos, combine related content into larger sections to stay within the 3-15 section limit`
             }]
           }],
           generationConfig: {
             temperature: 0.7,
-            maxOutputTokens: 512
+            maxOutputTokens: 2088
           }
         })
       }); 
@@ -262,6 +321,7 @@ IMPORTANT: Respond ONLY with the JSON object. No additional text or explanations
         videoThumbnail: videoData?.thumbnail || "",
         keyPoints: parsedSummary?.keyPoints || [""],
         quotes: parsedSummary?.quotes || [""],
+        transcriptSections: parsedSummary?.transcriptSections || []
       };
     } catch (error) {
       console.error('Error in summarization:', error);
@@ -373,6 +433,8 @@ IMPORTANT: Respond ONLY with the JSON object. No additional text or explanations
           summary={summaryResult.summary}
           keyPoints={summaryResult.keyPoints}
           quotes={summaryResult.quotes}
+          transcriptSections={summaryResult.transcriptSections}
+          videoId={extractVideoId(summaryResult.videoLink) || ""}
         />
       )}
 

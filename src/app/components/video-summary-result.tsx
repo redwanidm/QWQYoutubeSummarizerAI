@@ -1,8 +1,13 @@
-import {Copy, CheckCheck, Clock, MessageSquareQuote, FileText, ListChecks, Quote} from 'lucide-react';
-
-import {useState} from 'react'
+import {Copy, CheckCheck, Clock, MessageSquareQuote, FileText, ListChecks, Quote,Clapperboard} from 'lucide-react';
+import Link from 'next/link';
+import {useState, useEffect} from 'react'
 import { mateSc } from '@/app/ui/fonts';
-
+interface TranscriptSection {
+  startTime: string;
+  endTime: string;
+  summary: string;
+  sectionTitle:string;
+}
 const VideoSummaryResult = ({
   className ,
   videoTitle = "",
@@ -13,6 +18,8 @@ const VideoSummaryResult = ({
   quotes = [],
   videoLink = "",
   isVisible,
+  transcriptSections = [],
+  videoId = "",
 }: {
   className?: string;
   videoTitle?: string;
@@ -23,10 +30,17 @@ const VideoSummaryResult = ({
   quotes?: string[];
   isVisible: boolean;
   videoLink:string;
+  transcriptSections?:TranscriptSection[];
+  videoId :string,
 }) => {
-
+ 
   const [activeTab, setActiveTab] = useState("summary")
   const [iscopied,setIscopied] = useState(false);
+
+  useEffect(() => {
+    console.log('Transcript sections:', transcriptSections);
+  }, [transcriptSections]);
+
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     // Simple alert instead of toast
@@ -35,7 +49,10 @@ const VideoSummaryResult = ({
     setTimeout(() => setIscopied(false), 2000);
 
   };
-
+  function convertTimeToSeconds(timeString : string) {
+    const [minutes, seconds] = timeString.split(':').map(Number);
+    return minutes * 60 + seconds;
+  }
   if (!isVisible) return null;
 
   return (
@@ -103,6 +120,15 @@ const VideoSummaryResult = ({
             >
              <Quote className='h-4 w-4 mr-2'/>  Quotes
             </a>
+
+
+            <a 
+              role="tab" 
+              className={`tab ${activeTab === 'transcript' ? 'tab-active' : ''}`} 
+              onClick={() => setActiveTab('transcript')}
+            >
+             <Clapperboard className='h-4 w-4 mr-2'/>  Breakdown
+            </a>
           </div>
 
           {/* Tab content container */}
@@ -120,7 +146,7 @@ const VideoSummaryResult = ({
                   <div className="mb-2 flex items-center">
                     <h3 className="text-md font-medium">📝 Summary Overview</h3>
                   </div>
-                  <p className="text-sm leading-relaxed">{summary}</p>
+                  <p className={`${summary.startsWith("ERROR") ? "text-error " : ""}   text-sm leading-relaxed`}>{summary}</p>
                 </div>
               </div>
             </div>
@@ -176,6 +202,68 @@ const VideoSummaryResult = ({
                 </div>
               </div>
             </div>
+
+            {/*Break down tab*/}
+            <div 
+  className={`absolute w-full h-full overflow-auto transition-all duration-300 ease-in-out transform ${
+    activeTab === 'transcript' 
+      ? 'opacity-100 translate-x-0' 
+      : 'opacity-0 translate-x-8 pointer-events-none'
+  }`}
+>
+  <div className="card bg-base-200">
+    <div className="card-body p-4 max-h-full overflow-auto">
+      <div className="mb-2 flex items-center justify-between">
+        <h3 className="text-md font-medium">🎬 Transcript Breakdown</h3>
+        <div className="text-xs text-neutral-content/70">
+          Click on a section to expand
+        </div>
+      </div>
+      
+      {transcriptSections && transcriptSections.length > 0 ? (
+        <div className="space-y-3">
+          {transcriptSections.map((section, index) => (
+            <div key={index} className="collapse collapse-arrow bg-base-100 border border-base-300">
+              <input type="checkbox" className="peer" />
+              <div className="collapse-title flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className={`badge badge-primary badge-sm flex items-center mr-1 ${mateSc?.className}`}>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 " fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                   <p className='hover:underline'> {section.startTime} - {section.endTime}</p>
+                  </span>
+                  <span className={`text-sm  text-base-content/80 truncate max-w-[250px] ${mateSc?.className}` }>
+                    {section.sectionTitle}
+                  </span>
+                </div>
+              </div>
+              <div className="collapse-content text-sm border-t border-base-300">
+                <p className="pt-3">{section.summary}</p>
+                <Link 
+        href={`https://www.youtube.com/watch?v=${videoId}&t=${convertTimeToSeconds(section.startTime)}`} 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className={`btn mt-3 btn-ghost btn-xs text-primary hover:bg-primary/10 flex items-center gap-1 p-4 ${mateSc?.className}`}
+      >
+       
+        Watch at {section.startTime}
+      </Link>
+              </div>
+         
+            </div>
+          ))}
+        </div>
+      ) : (
+
+        
+        <div className="text-center py-6 text-neutral-content">
+          <p>No transcript sections available for this video.</p>
+        </div>
+      )}
+    </div>
+  </div>
+</div>
           </div>
         </div>
       </div>
