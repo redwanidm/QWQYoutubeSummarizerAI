@@ -3,7 +3,6 @@
 import React from 'react';
 import Layout from '../pages/layout';
 import { Mail, MessageCircle, Send } from 'lucide-react';
-
 const Contact = () => {
   return (
     <Layout>

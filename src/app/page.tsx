@@ -35,7 +35,7 @@ export default function Home() {
 
   const YOUTUBE_API_KEY = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
   const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-
+  const API_BASE_URL = process.env.NEXT_PUBLIC_NGROK_URL;
   const parseSummaryText = (summaryText: string): SummaryResult | null => {
     try {
       // Remove everything before the first '{' and after the last '}'
@@ -128,25 +128,51 @@ export default function Home() {
     }
   }, [youtubeUrl]); // Dependency array ensures this runs when URL changes
 
-
-
-
-
-  async function getTranscriptText(videoId: string): Promise<string | undefined> {
+  async function getTranscriptText(videoId: string) {
     try {
-      const response = await fetch(`/api/transcript?videoId=${videoId}`);
+      console.log(`Attempting to fetch transcript for video ID: ${videoId}`);
+      
+      const response = await fetch(`https://67f6-41-96-31-165.ngrok-free.app/transcript?video_input=${videoId}`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include' // Add this to support credentials if needed
+      });
+      
+      // Log the full response details for debugging
+      console.log('Response status:', response.status);
+      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
       
       if (!response.ok) {
-        throw new Error('Transcript fetch failed');
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      // Additional checks on the parsed data
+      if (!data || !data.transcript) {
+        console.error('No transcript found in the response');
+        throw new Error('No transcript in response');
       }
   
-      const data = await response.json();
+      console.log("Transcript fetched successfully:", data.transcript.slice(0, 200) + '...');
       return data.transcript;
     } catch (error) {
-      console.error('Error fetching transcript:', error);
+      console.error('Comprehensive Transcript Fetch Error:', error);
+      
+      // More detailed error logging
+      if (error instanceof TypeError) {
+        console.error('Network Error: Check your connection or server availability');
+      } else if (error instanceof SyntaxError) {
+        console.error('JSON Parsing Error: Check the response format');
+      }
+      
       return undefined;
     }
   }
+
 
   async function GeminiSummarize(youtubeUrl: string): Promise<SummaryResult | null> {
     const videoId = extractVideoId(youtubeUrl);
