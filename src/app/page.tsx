@@ -356,7 +356,8 @@ IMPORTANT:
 
   return (
     <Layout>
-      <header className="mb-12 text-center">
+      <header className="mb-12 text-center"  
+      >
         <div className="mx-auto mb-4">
           <div className="inline-block px-4 py-1.5 bg-primary/10 text-primary text-sm font-medium rounded-full animate-fade-in">
             <p className='mt-1'>Smart Video Summaries </p>

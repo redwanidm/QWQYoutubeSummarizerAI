@@ -59,7 +59,8 @@ const VideoSummaryResult = ({
 
 
     <div 
-    className={`w-full max-w-4xl mx-auto mt-4 transition-all duration-500 ${className || ''}`}
+    className={`w-full max-w-4xl mx-auto mt-4 transition-all duration-500 ${className || ''}`} 
+
   >
     <div className="card bg-base-100 shadow-xl">
       <div className="flex flex-col md:flex-row">
@@ -204,7 +205,8 @@ const VideoSummaryResult = ({
             </div>
 
             {/*Break down tab*/}
-            <div 
+            {/* Transcript Tab */}
+<div 
   className={`absolute w-full h-full overflow-auto transition-all duration-300 ease-in-out transform ${
     activeTab === 'transcript' 
       ? 'opacity-100 translate-x-0' 
@@ -213,9 +215,9 @@ const VideoSummaryResult = ({
 >
   <div className="card bg-base-200">
     <div className="card-body p-4 max-h-full overflow-auto">
-      <div className="mb-2 flex items-center justify-between">
-        <h3 className="text-md font-medium">🎬 Transcript Breakdown</h3>
-        <div className="text-xs text-neutral-content/70">
+      <div className="mb-2 flex flex-col sm:flex-row sm:items-center justify-between">
+        <h3 className="text-md font-medium mb-2 sm:mb-0">🎬 Transcript Breakdown</h3>
+        <div className="text-xs text-neutral-content/70 text-center sm:text-right">
           Click on a section to expand
         </div>
       </div>
@@ -225,44 +227,41 @@ const VideoSummaryResult = ({
           {transcriptSections.map((section, index) => (
             <div key={index} className="collapse collapse-arrow bg-base-100 border border-base-300">
               <input type="checkbox" className="peer" />
-              <div className="collapse-title flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className={`badge badge-primary badge-sm flex items-center mr-1 ${mateSc?.className}`}>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 " fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="collapse-title flex flex-col sm:flex-row items-start sm:items-center justify-between">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full">
+                  <span className={`badge badge-primary badge-sm flex items-center mr-1 mb-2 sm:mb-0 min-w-[110px] ${mateSc?.className}`}>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                   <p className='hover:underline'> {section.startTime} - {section.endTime}</p>
+                    <p className='hover:underline '>{section.startTime} - {section.endTime}</p>
                   </span>
-                  <span className={`text-sm  text-base-content/80 truncate max-w-[250px] ${mateSc?.className}` }>
+                  <span title={section.sectionTitle} className={`text-sm text-base-content/80 break-words w-full  ${mateSc?.className}`}>
                     {section.sectionTitle}
                   </span>
                 </div>
               </div>
               <div className="collapse-content text-sm border-t border-base-300">
-                <p className="pt-3">{section.summary}</p>
+                <p className="pt-3 break-words">{section.summary}</p>
                 <Link 
-        href={`https://www.youtube.com/watch?v=${videoId}&t=${convertTimeToSeconds(section.startTime)}`} 
-        target="_blank" 
-        rel="noopener noreferrer"
-        className={`btn mt-3 btn-ghost btn-xs text-primary hover:bg-primary/10 flex items-center gap-1 p-4 ${mateSc?.className}`}
-      >
-       
-        Watch at {section.startTime}
-      </Link>
+                  href={`https://www.youtube.com/watch?v=${videoId}&t=${convertTimeToSeconds(section.startTime)}`} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className={`btn mt-3 btn-ghost btn-xs text-primary hover:bg-primary/10 flex items-center gap-1 p-4 ${mateSc?.className}`}
+                >
+                  Watch at {section.startTime}
+                </Link>
               </div>
-         
             </div>
           ))}
         </div>
       ) : (
-
-        
         <div className="text-center py-6 text-neutral-content">
           <p>No transcript sections available for this video.</p>
         </div>
       )}
     </div>
   </div>
+
 </div>
           </div>
         </div>
