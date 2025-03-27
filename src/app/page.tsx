@@ -132,47 +132,49 @@ export default function Home() {
     try {
       console.log(`Attempting to fetch transcript for video ID: ${videoId}`);
       
-      const response = await fetch(`https://67f6-41-96-31-165.ngrok-free.app/transcript?video_input=${videoId}`, {
+      const ngrokUrl = 'https://e8bf-41-96-31-165.ngrok-free.app';  // Replace with current URL
+      const fullUrl = `${ngrokUrl}/transcript/?video_id=${videoId}`;
+  
+      console.log('Full Request URL:', fullUrl);
+  
+      const response = await fetch(fullUrl, {
         method: 'GET',
         headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          "ngrok-skip-browser-warning": "69420",
+          'Origin': 'http://localhost:3000',  // Match your frontend origin
         },
-        credentials: 'include' // Add this to support credentials if needed
       });
-      
-      // Log the full response details for debugging
-      console.log('Response status:', response.status);
-      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const data = await response.json();
-      
-      // Additional checks on the parsed data
-      if (!data || !data.transcript) {
-        console.error('No transcript found in the response');
-        throw new Error('No transcript in response');
+  
+      console.log('Response Status:', response.status);
+      console.log('Response Headers:', Object.fromEntries(response.headers.entries()));
+  
+      // Log raw text before parsing
+      const responseText = await response.text();
+      console.log('Raw Response Text:', responseText);
+  
+      try {
+        const data = JSON.parse(responseText);
+        
+        if (!data || !data.transcript) {
+          console.error('Invalid response structure:', data);
+          throw new Error('No transcript in response');
+        }
+  
+        console.log("Transcript fetched successfully:", data.transcript.slice(0, 200) + '...');
+        return data.transcript;
+  
+      } catch (parseError) {
+        console.error('JSON Parsing Error:', parseError);
+        console.error('Response that failed to parse:', responseText);
+        throw parseError;
       }
   
-      console.log("Transcript fetched successfully:", data.transcript.slice(0, 200) + '...');
-      return data.transcript;
     } catch (error) {
       console.error('Comprehensive Transcript Fetch Error:', error);
-      
-      // More detailed error logging
-      if (error instanceof TypeError) {
-        console.error('Network Error: Check your connection or server availability');
-      } else if (error instanceof SyntaxError) {
-        console.error('JSON Parsing Error: Check the response format');
-      }
-      
       return undefined;
     }
   }
-
 
   async function GeminiSummarize(youtubeUrl: string): Promise<SummaryResult | null> {
     const videoId = extractVideoId(youtubeUrl);
