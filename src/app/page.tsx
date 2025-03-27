@@ -397,7 +397,7 @@ IMPORTANT:
                   <button
                     type="submit"
                     className="btn btn-primary w-full py-3 text-base rounded rounded-l-none font-medium"
-                    disabled={isLoading || !videoData}
+                    
                   >
                     {isLoading ? (
                       <>
