@@ -96,7 +96,7 @@ const VideoSummaryResult = ({
         {/* Divider */}
         <div className="divider divider-horizontal hidden md:flex"></div>
         
-        <div className="w-full md:w-2/3 p-4">
+        <div className="w-full md:w-2/3 px-0 pt-4 sm:p-4">
           {/* Tab buttons */}
           <div role="tablist" className={`tabs tabs-boxed mb-4 w-full flex justify-around ${mateSc?.className} antialiased`}>
             <a 
@@ -142,8 +142,8 @@ const VideoSummaryResult = ({
                   : 'opacity-0 translate-x-8 pointer-events-none'
               }`}
             >
-              <div className="card bg-base-200">
-                <div className="card-body p-4 max-h-full overflow-auto">
+              <div className="card bg-base-200 rounded-none md:rounded-selector">
+                <div className="card-body p-4 max-h-full overflow-auto  ">
                   <div className="mb-2 flex items-center">
                     <h3 className="text-md font-medium">📝 Summary Overview</h3>
                   </div>
@@ -160,7 +160,7 @@ const VideoSummaryResult = ({
                   : 'opacity-0 translate-x-8 pointer-events-none'
               }`}
             >
-              <div className="card bg-base-200">
+              <div className="card bg-base-200 rounded-none md:rounded-selector">
                 <div className="card-body p-4 max-h-full overflow-auto">
                   <div className="mb-2 flex items-center">
                     <h3 className="text-md font-medium">🔑 Main Takeaways</h3>
@@ -185,7 +185,7 @@ const VideoSummaryResult = ({
                   : 'opacity-0 translate-x-8 pointer-events-none'
               }`}
             >
-              <div className="card bg-base-200">
+              <div className="card bg-base-200 rounded-none md:rounded-selector">
                 <div className="card-body p-4 max-h-full overflow-auto">
                   <div className="mb-2 flex items-center">
                     <h3 className="text-md font-medium">💬 Notable Quotes</h3>
@@ -213,7 +213,7 @@ const VideoSummaryResult = ({
       : 'opacity-0 translate-x-8 pointer-events-none'
   }`}
 >
-  <div className="card bg-base-200">
+  <div className="card bg-base-200 rounded-none md:rounded-selector">
     <div className="card-body p-4 max-h-full overflow-auto">
       <div className="mb-2 flex flex-col sm:flex-row sm:items-center justify-between">
         <h3 className="text-md font-medium mb-2 sm:mb-0">🎬 Transcript Breakdown</h3>
@@ -229,7 +229,7 @@ const VideoSummaryResult = ({
               <input type="checkbox" className="peer" />
               <div className="collapse-title flex flex-col sm:flex-row items-start sm:items-center justify-between">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full">
-                <span className={`badge badge-primary badge-sm flex items-center mr-1 mb-2 sm:mb-0 w-fit px-3 ${mateSc?.className}`}>
+                <span className={`badge badge-primary badge-sm flex items-center mr-1 mb-2 sm:mb-0 w-fit px-2 ${mateSc?.className}`}>
   <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 md:mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
   </svg>
