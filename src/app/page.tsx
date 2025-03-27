@@ -35,7 +35,7 @@ export default function Home() {
 
   const YOUTUBE_API_KEY = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
   const GEMINI_API_KEY = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-  const API_BASE_URL = process.env.NEXT_PUBLIC_NGROK_URL;
+  // const API_BASE_URL = process.env.NEXT_PUBLIC_NGROK_URL;
   const parseSummaryText = (summaryText: string): SummaryResult | null => {
     try {
       // Remove everything before the first '{' and after the last '}'
