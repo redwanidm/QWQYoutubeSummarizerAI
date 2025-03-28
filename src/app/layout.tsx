@@ -56,8 +56,8 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning={true}>
       <body className={`${josefinSans.className} antialiased`}>
-      <SpeedInsights/>
       <ThemeProvider defaultTheme="night">
+      <SpeedInsights/>
       
         {children}
       </ThemeProvider>
