@@ -390,33 +390,33 @@ IMPORTANT:
           </div>
         </div>
         <h1 className={`mb-2 text-3xl font-bold  ${mateSc.className} antialiased`}>YouTube Summarizer</h1>
-        <p className="mx-auto max-w-md text-base-content/70">Get concise summaries of any YouTube video in seconds</p>
-      </header>
+          <p className="mx-auto max-w-md text-base-content/70">Get concise summaries of any YouTube video in seconds</p>
+        </header>
 
       <div className="card mx-auto mb-10 bg-base-100 ">
-        <div className="bg-gradient-to-r from-primary rounded-2xl to-secondary p-1">
-          <div className="card-body bg-base-100 rounded-xl p-6">
-            <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="bg-gradient-to-r from-primary rounded-2xl to-secondary p-1">
+            <div className="card-body bg-base-100 rounded-xl p-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-end">
-                <div className="relative flex-1">
-                  <div className="mb-2 flex items-center justify-between">
-                    <label htmlFor="youtube-url" className="label">
-                      <span className="label-text">YouTube Video URL</span>
-                    </label>
-                  </div>
+                  <div className="relative flex-1">
+                    <div className="mb-2 flex items-center justify-between">
+                      <label htmlFor="youtube-url" className="label">
+                        <span className="label-text">YouTube Video URL</span>
+                      </label>
+                    </div>
 
 
-                  <div className="relative">
-                    <div className="input-group">
-                      <input
-                        id="youtube-url"
-                        type="url"
-                        placeholder="https://www.youtube.com/watch?v=..."
-                        value={youtubeUrl}
-                        onChange={(e) => setYoutubeUrl(e.target.value)}
-                        required
-                        className="input input-bordered w-full font-sans rounded-r-none"
-                      />
+                    <div className="relative">
+                      <div className="input-group">
+                        <input
+                          id="youtube-url"
+                          type="url"
+                          placeholder="https://www.youtube.com/watch?v=..."
+                          value={youtubeUrl}
+                          onChange={(e) => setYoutubeUrl(e.target.value)}
+                          required
+                          className="input input-bordered w-full font-sans rounded-r-none"
+                        />
 
                     </div>
                   </div>
@@ -424,46 +424,47 @@ IMPORTANT:
                   <LanguageSelector value={language} onValueChange={setLanguage} />
 
                 <div className="sm:w-48 md:w-72 mt-4 sm:mt-0">
-                  <button
-                    type="submit"
+                    <button
+                  type="submit"
                     className="btn btn-primary w-full py-3 text-base rounded rounded-l-none font-medium"
                     disabled={isLoading || !videoData}
-                  >
-                    {isLoading ? (
-                      <>
-                        <span className="loading loading-spinner"></span>
-                        Summarizing...
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles className="h-5 w-5" />
-                        Summarize Video
-                      </>
-                    )}
-                  </button>
+                >
+                  {isLoading ? (
+                    <>
+                      <span className="loading loading-spinner"></span>
+                      Summarizing...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="h-5 w-5" />
+                      Summarize Video
+                    </>
+                  )}
+                </button>
+                  </div>
                 </div>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
 
-      {isLoading && (
-        <div className="flex justify-center py-10">
-          <span className="loading loading-dots loading-lg text-primary"></span>
-        </div>
-      )}
+        {isLoading && (
+          <div className="flex justify-center py-10">
+            <span className="loading loading-dots loading-lg text-primary"></span>
+          </div>
+        )}
 
-      {summaryResult && (
-        <VideoSummaryResult
+        {summaryResult && (
+        
+          <VideoSummaryResult
           videoLink={summaryResult.videoLink}
-          isVisible={!!summaryResult}
-          videoTitle={summaryResult.videoTitle}
-          videoDuration={summaryResult.videoDuration}
-          videoThumbnail={summaryResult.videoThumbnail}
-          summary={summaryResult.summary}
-          keyPoints={summaryResult.keyPoints}
-          quotes={summaryResult.quotes}
+            isVisible={!!summaryResult}
+            videoTitle={summaryResult.videoTitle}
+            videoDuration={summaryResult.videoDuration}
+            videoThumbnail={summaryResult.videoThumbnail}
+            summary={summaryResult.summary}
+            keyPoints={summaryResult.keyPoints}
+            quotes={summaryResult.quotes}
           transcriptSections={summaryResult.transcriptSections}
           videoId={extractVideoId(summaryResult.videoLink) || ""}
         />

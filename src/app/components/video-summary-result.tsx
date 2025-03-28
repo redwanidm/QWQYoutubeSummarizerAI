@@ -1,6 +1,6 @@
 import {Copy, CheckCheck, Clock, MessageSquareQuote, FileText, ListChecks, Quote,Clapperboard} from 'lucide-react';
 import Link from 'next/link';
-import {useState, useEffect} from 'react'
+import {useState} from 'react'
 import { mateSc } from '@/app/ui/fonts';
 interface TranscriptSection {
   startTime: string;
@@ -37,9 +37,7 @@ const VideoSummaryResult = ({
   const [activeTab, setActiveTab] = useState("summary")
   const [iscopied,setIscopied] = useState(false);
 
-  useEffect(() => {
-    console.log('Transcript sections:', transcriptSections);
-  }, [transcriptSections]);
+ 
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -59,7 +57,7 @@ const VideoSummaryResult = ({
 
 
     <div 
-    className={`w-full max-w-4xl mx-auto mt-4 transition-all duration-500 ${className || ''}`} 
+    className={`w-full max-w-4xl mx-auto mt-4 transition-all duration-500 animate-fade-up ${className || ''}`} 
 
   >
     <div className="card bg-base-100 shadow-xl">
@@ -96,9 +94,9 @@ const VideoSummaryResult = ({
         {/* Divider */}
         <div className="divider divider-horizontal hidden md:flex"></div>
         
-        <div className="w-full md:w-2/3 p-0 sm:p-4">
+        <div className="w-full md:w-2/3 p-4">
           {/* Tab buttons */}
-          <div role="tablist" className={`tabs tabs-boxed mb-4 w-full flex justify-around ${mateSc?.className} antialiased`}>
+          <div role="tablist" className={`tabs tabs-box  mb-4 w-full flex justify-around p-3 ${mateSc?.className} antialiased`}>
             <a 
               role="tab" 
               className={`tab ${activeTab === 'summary' ? 'tab-active' : ''}`} 
@@ -133,13 +131,13 @@ const VideoSummaryResult = ({
           </div>
 
           {/* Tab content container */}
-          <div className="relative h-80"> {/* Restored original height */}
+          <div className="relative min-h-80"> {/* Restored original height */}
             {/* Summary Tab */}
             <div 
-              className={`absolute w-full h-full overflow-auto transition-all duration-300 ease-in-out transform ${
+              className={` w-full h-full  transition-all duration-300 ${
                 activeTab === 'summary' 
-                  ? 'opacity-100 translate-x-0' 
-                  : 'opacity-0 translate-x-8 pointer-events-none'
+                    ? ' opacity-100 visible' 
+            : 'opacity-0 invisible absolute pointer-events-none'
               }`}
             >
               <div className="card bg-base-200">
@@ -154,10 +152,10 @@ const VideoSummaryResult = ({
             
             {/* Key Points Tab */}
             <div 
-              className={`absolute w-full h-full overflow-auto transition-all duration-300 ease-in-out transform ${
+              className={` w-full h-full  transition-all duration-300 ease-in-out transform overflow-hidden  ${
                 activeTab === 'keypoints' 
-                  ? 'opacity-100 translate-x-0' 
-                  : 'opacity-0 translate-x-8 pointer-events-none'
+               ? ' opacity-100 visible' 
+            : 'max-h-0 opacity-0 invisible absolute  pointer-events-none'
               }`}
             >
               <div className="card bg-base-200">
@@ -179,10 +177,10 @@ const VideoSummaryResult = ({
             
             {/* Quotes Tab */}
             <div 
-              className={`absolute w-full h-full overflow-auto transition-all duration-300 ease-in-out transform ${
+              className={` w-full h-full  transition-all duration-300 overflow-hidden ${
                 activeTab === 'quotes' 
-                  ? 'opacity-100 translate-x-0' 
-                  : 'opacity-0 translate-x-8 pointer-events-none'
+                   ? ' opacity-100 visible' 
+            : 'max-h-0 opacity-0 invisible absolute  pointer-events-none'
               }`}
             >
               <div className="card bg-base-200">
@@ -207,10 +205,10 @@ const VideoSummaryResult = ({
             {/*Break down tab*/}
             {/* Transcript Tab */}
 <div 
-  className={`absolute w-full h-full overflow-auto transition-all duration-300 ease-in-out transform ${
+  className={`w-full h-full transition-all duration-300 overflow-hidden ${
     activeTab === 'transcript' 
-      ? 'opacity-100 translate-x-0' 
-      : 'opacity-0 translate-x-8 pointer-events-none'
+      ? 'opacity-100 visible' 
+            : 'max-h-0 opacity-0 invisible pointer-events-none'
   }`}
 >
   <div className="card bg-base-200">
