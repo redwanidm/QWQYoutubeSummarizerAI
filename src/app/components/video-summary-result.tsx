@@ -147,7 +147,7 @@ const VideoSummaryResult = ({
                   <div className="mb-2 flex items-center">
                     <h3 className="text-md font-medium">📝 Summary Overview</h3>
                   </div>
-                  <p className={`${summary.startsWith("ERROR") ? "text-error " : ""}   text-sm leading-relaxed`}>{summary}</p>
+                  <p className={`${summary.startsWith("ERROR") ? "text-error " : ""}   text-sm leading-relaxed  `}  dir="auto">{summary}</p>
                 </div>
               </div>
             </div>
@@ -169,7 +169,7 @@ const VideoSummaryResult = ({
                     {keyPoints && keyPoints.map((point, index) => (
                       <li key={index} className="flex items-start gap-2">
                         <CheckCheck className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
-                        <p className={`text-sm mt-1`}>{point}</p>
+                        <p className={`text-sm mt-1`}  dir="auto">{point}</p>
                       </li>
                     ))}
                   </ul>
@@ -195,7 +195,7 @@ const VideoSummaryResult = ({
                       <li key={index} className="bg-base-100 p-3 rounded-md">
                         <div className="flex items-start gap-2">
                           <MessageSquareQuote className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
-                          <p className="text-sm italic mt-1">&quot;{quote}&quot;</p>
+                          <p className="text-sm italic mt-1"  dir="auto">&quot;{quote}&quot;</p>
                         </div>
                       </li>
                     ))}
@@ -235,13 +235,13 @@ const VideoSummaryResult = ({
   </svg>
   <p className='hover:underline whitespace-nowrap'>{section.startTime} - {section.endTime}</p>
 </span>
-                  <span title={section.sectionTitle} className={`text-sm text-base-content/80 break-words w-full  ${mateSc?.className}`}>
+                  <span title={section.sectionTitle} className={`text-sm text-base-content/80 break-words w-full  ${mateSc?.className}`}  dir="auto">
                     {section.sectionTitle}
                   </span>
                 </div>
               </div>
               <div className="collapse-content text-sm border-t border-base-300">
-                <p className="pt-3 break-words">{section.summary}</p>
+                <p className="pt-3 break-words"  dir="auto">{section.summary}</p>
                 <Link 
                   href={`https://www.youtube.com/watch?v=${videoId}&t=${convertTimeToSeconds(section.startTime)}`} 
                   target="_blank" 

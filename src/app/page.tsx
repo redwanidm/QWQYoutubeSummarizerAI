@@ -6,6 +6,7 @@ import VideoSummaryResult from './components/video-summary-result';
 import Informations from './components/informations';
 import { mateSc } from '@/app/ui/fonts';
 
+import LanguageSelector, { Language } from './components/languageSelector';
 
 import Layout from './pages/layout';
 interface TranscriptSection {
@@ -14,6 +15,7 @@ interface TranscriptSection {
   summary: string;
   sectionTitle:string; 
 }
+
 
 interface RawTranscriptEntry {
   text: string;
@@ -41,6 +43,9 @@ export default function Home() {
     thumbnail: string;
     duration: string;
   } | null>(null);
+
+
+  const [language, setLanguage] = useState<Language>('english');
 
   const extractVideoId = (url: string) => {
     const match = 
@@ -124,7 +129,7 @@ export default function Home() {
 
     const fetchVideoInfo = async () => {
       const videoId = extractVideoId(youtubeUrl);
-      console.log("VIDEO ID",videoId)
+      // console.log("VIDEO ID",videoId)
       if (!videoId) {
         // Optionally clear previous video data if URL is invalid
         setVideoData(null);
@@ -161,12 +166,12 @@ export default function Home() {
 
   async function getTranscriptText(videoId: string) {
     try {
-      console.log(`Attempting to fetch transcript for video ID: ${videoId}`);
+      // console.log(`Attempting to fetch transcript for video ID: ${videoId}`);
       
         // Replace with current URL
       const fullUrl = `${API_BASE_URL}/transcript/?video_id=${videoId}`;
   
-      console.log('Full Request URL:', fullUrl);
+      // console.log('Full Request URL:', fullUrl);
   
       const response = await fetch(fullUrl, {
         method: 'GET',
@@ -177,12 +182,12 @@ export default function Home() {
         },
       });
   
-      console.log('Response Status:', response.status);
-      console.log('Response Headers:', Object.fromEntries(response.headers.entries()));
+      // console.log('Response Status:', response.status);
+      // console.log('Response Headers:', Object.fromEntries(response.headers.entries()));
   
       // Log raw text before parsing
       const responseText = await response.text();
-      console.log('Raw Response Text:', responseText);
+      // console.log('Raw Response Text:', responseText);
   
       try {
         const data = JSON.parse(responseText);
@@ -192,7 +197,7 @@ export default function Home() {
           throw new Error('No transcript in response');
         }
   
-        console.log("Transcript fetched successfully:", data.transcript.slice(0, 200) + '...');
+        // console.log("Transcript fetched successfully:", data.transcript.slice(0, 200) + '...');
         return {
           transcript: data.transcript,
           rawTranscript: data.raw_transcript
@@ -210,7 +215,7 @@ export default function Home() {
     }
   }
 
-  async function GeminiSummarize(youtubeUrl: string): Promise<SummaryResult | null> {
+  async function GeminiSummarize(youtubeUrl: string,language:string): Promise<SummaryResult | null> {
     const videoId = extractVideoId(youtubeUrl);
 
     if (!videoId) {
@@ -223,12 +228,12 @@ export default function Home() {
 
       if (transcriptData) {
         // Process raw transcript to include formatted timestamps
-        const processedTranscript = transcriptData.rawTranscript.map((entry: RawTranscriptEntry) => ({
-          ...entry,
-          formattedStart: formatTimestamp(entry.start),
-          formattedEnd: formatTimestamp(entry.start + entry.duration)
-        }));
-        console.log('Processed transcript:', processedTranscript[0]);
+        // const processedTranscript = transcriptData.rawTranscript.map((entry: RawTranscriptEntry) => ({
+        //   ...entry,
+        //   formattedStart: formatTimestamp(entry.start),
+        //   formattedEnd: formatTimestamp(entry.start + entry.duration)
+        // }));
+        // console.log('Processed transcript:', processedTranscript[0]);
       }
       
       if (!GEMINI_API_KEY) {
@@ -238,7 +243,7 @@ export default function Home() {
       if (!transcriptData) {
         return({
         videoLink: youtubeUrl,
-        summary: "ERROR: The transcripter api is disabled ask the developper to enable it",
+        summary: "ERROR: The api is disabled ask the developper to enable it",
         videoTitle: videoData?.title || "Video Title",
         videoDuration: videoData?.duration ? convertYoutubeDuration(videoData.duration) : "00:00",
         videoThumbnail: videoData?.thumbnail || "",
@@ -264,12 +269,24 @@ Raw Transcript Data: ${JSON.stringify(transcriptData.rawTranscript.map((entry: R
   startTime: formatTimestamp(entry.start),
   endTime: formatTimestamp(entry.start + entry.duration)
 })))}
+Language you must use: ${language} 
 
 Instructions:
-1. Summary: Write a concise, 3-4 sentence overview of the video's main content.
-2. Key Points: Identify the 4-5 most important takeaways or insights.
-3. Quotes: Select 3 memorable quotes that best represent the video's core message.
-4. Transcript Sections: Break down the transcript into 3-15 logical sections, using the raw transcript timestamps.
+1. Summary: Develop a concise, 3-4 sentence overview that captures the video's core narrative, central argument, or key message. Prioritize depth over brevity, ensuring the summary provides meaningful context and synthesizes the most critical insights.
+Key Points: Directly extract the most significant, concrete information and takeaways from the video. Focus on:
+    - Specific facts, findings, or discoveries
+    - Actionable insights
+    - Direct statements of knowledge or conclusion
+    - Avoid meta-language like "the video highlights" or "the content discusses"
+    - Provide clear, declarative statements that stand alone as valuable information
+3. Quotes: Select 3 most representative quotes that not only encapsulate the video's core message but also demonstrate linguistic significance, emotional resonance, or intellectual depth. Prioritize quotes that reveal underlying themes or provocative perspectives.
+
+4. Transcript Sections: Strategically segment the transcript to reveal the video's narrative arc, logical progression, or argumentative structure. Aim to:
+    - Capture semantic and thematic transitions
+    - Highlight critical conceptual shifts
+    - Provide meaningful context for each section
+    - Ensure comprehensive coverage of the entire video duration
+    - stay within 5-15 logical sections 
 
 Required Output Format (MUST follow exactly):
 {
@@ -295,10 +312,14 @@ Required Output Format (MUST follow exactly):
 
 IMPORTANT: 
 - Respond ONLY with the JSON object. No additional text or explanations.
+- do not translate the quotes keep them in their native language
 - Each transcriptSection MUST cover a continuous portion of the video
 - The sections together MUST cover the ENTIRE video duration
 - Format timestamps as MM:SS and for videos duration more than an hour use HH:MM:SS
-- For longer videos, combine related content into larger sections to stay within the 3-15 section limit`
+- For longer videos, combine related content into larger sections to stay within the 5-15 section limit
+- Prioritize intellectual rigor, thematic coherence, and nuanced analysis in all components
+- Demonstrate critical thinking by identifying subtle connections and underlying themes
+- Maintain objectivity while capturing the video's essence and intellectual depth`
             }]
           }],
           generationConfig: {
@@ -348,7 +369,7 @@ IMPORTANT:
     setIsLoading(true);
     
     try {
-      const summary = await GeminiSummarize(youtubeUrl);
+      const summary = await GeminiSummarize(youtubeUrl,language);
       setSummaryResult(summary);
     } catch (error) {
       console.error('Summarization error:', error);
@@ -383,6 +404,8 @@ IMPORTANT:
                       <span className="label-text">YouTube Video URL</span>
                     </label>
                   </div>
+
+
                   <div className="relative">
                     <div className="input-group">
                       <input
@@ -394,9 +417,11 @@ IMPORTANT:
                         required
                         className="input input-bordered w-full font-sans rounded-r-none"
                       />
+
                     </div>
                   </div>
                 </div>
+                  <LanguageSelector value={language} onValueChange={setLanguage} />
 
                 <div className="sm:w-48 md:w-72 mt-4 sm:mt-0">
                   <button
