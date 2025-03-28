@@ -3,6 +3,7 @@ import "./globals.css";
 import { josefinSans } from '@/app/ui/fonts';
 import { ThemeProvider } from 'next-themes'
 import Footer from "./components/footer"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata: Metadata = {
   title: "QwQ-TkitAI - YouTube Summarizer",
@@ -55,6 +56,7 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning={true}>
       <body className={`${josefinSans.className} antialiased`}>
+      <SpeedInsights/>
       <ThemeProvider defaultTheme="night">
       
         {children}
