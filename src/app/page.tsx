@@ -38,7 +38,7 @@ export default function Home() {
     thumbnail: string;
     duration: string;
   } | null>(null);
-
+  const [isDisabled,setIsDisabled] = useState (true);
 
   const [language, setLanguage] = useState<Language>('english');
 
@@ -103,7 +103,7 @@ export default function Home() {
   // New useEffect to handle URL changes
   useEffect(() => {
     const extractVideoId = (url: string) => {
-      console.log('url',url)
+      // console.log('url',url)
 
       const match = 
         url.match(/[?&]v=([^&]+)/) || 
@@ -113,13 +113,14 @@ export default function Home() {
 
     const fetchVideoInfo = async () => {
       const videoId = extractVideoId(youtubeUrl);
-      console.log("videoid",videoId)
 
       if (!videoId) {
-        // Optionally clear previous video data if URL is invalid
+        setIsDisabled(true);
         setVideoData(null);
         return;
       }
+      setIsDisabled(false)
+
       
       
       try {
@@ -328,7 +329,7 @@ export default function Home() {
                     <button
                   type="submit"
                     className="btn btn-primary w-full py-3 text-base rounded rounded-l-none font-medium"
-                    disabled={isLoading || !videoData}
+                    disabled={isLoading || isDisabled}
                 >
                   {isLoading ? (
                     <>
