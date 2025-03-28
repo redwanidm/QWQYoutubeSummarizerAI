@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Sparkles,Youtube,Code} from 'lucide-react';
+import {Sparkles,Youtube,Languages} from 'lucide-react';
 
 class Informations extends React.Component {
     state = {};
@@ -24,10 +24,11 @@ class Informations extends React.Component {
   
             <div className="flex flex-col items-center text-center">
               <div className="mb-4 badge badge-accent badge-lg p-4">
-                <Code className="h-6 w-6" />
+                <Languages className="h-6 w-6" />
               </div>
-              <h3 className="mb-2 text-lg font-medium">Customizable</h3>
-              <p className="text-sm text-base-content/70">Select the video type to get more relevant summaries (soon)</p>
+              <h3 className="mb-2 text-lg font-medium">Translate & Summarize</h3>
+              <p className="text-sm text-base-content/70">Summarize videos in Arabic, English, or French
+              </p>
             </div>
           </div> );
     }
