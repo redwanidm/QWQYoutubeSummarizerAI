@@ -7,7 +7,7 @@ An AI-powered free YouTube summarizer that extracts key points from any public Y
 ## Features
 
 - **Any YouTube Video**: Works with any public YouTube video.
-- **AI-Powered Summarization**: Extracts key points automatically.
+- **AI-Powered Summarization**: Extracts key points, quotes and a break down of the video automatically.
 - **Multilingual Support**: Summarizes videos in Arabic, English, or French.
 
 <img src="public/preview1.png" alt="preview1" >
