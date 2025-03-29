@@ -5,10 +5,8 @@ interface RawTranscriptEntry {
     duration: number;
   }
 export async function POST(request: NextRequest) {
-    // Check for API key in headers
     const apiAccessKey = request.headers.get('x-api-key');
     
-    // Validate the API access key
     if (!apiAccessKey || apiAccessKey !== process.env.API_ACCESS_KEY) {
         return NextResponse.json({ error: "charak dir :p" }, { status: 401 });
     }
@@ -16,17 +14,14 @@ export async function POST(request: NextRequest) {
     const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
     try {
-        // Parse the incoming request body
         const requestBody = await request.json();
 
-        // Validate request body
         if (!requestBody.transcriptData || !requestBody.language) {
             return NextResponse.json({ error: "Missing required parameters" }, { status: 400 });
         }
 
         const { transcriptData, language } = requestBody;
 
-        // Prepare the Gemini API request
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
             method: 'POST',
             headers: {
@@ -104,9 +99,7 @@ IMPORTANT:
             })
         });
 
-        // Parse the Gemini API response
         const data = await response.json();
-        // Return the parsed data
         return NextResponse.json(data, { status: 200 });
     } catch (error) {
         console.error('Error processing Gemini API request:', error);
@@ -114,7 +107,6 @@ IMPORTANT:
     }
 }
 
-// Helper function to format timestamp (you'll need to implement this)
 function formatTimestamp(seconds: number): string {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);

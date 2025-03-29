@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
-    // Check for API key in headers
     const apiAccessKey = request.headers.get('x-api-key');
     
-    // Validate the API access key
     if (!apiAccessKey || apiAccessKey !== process.env.API_ACCESS_KEY) {
         return NextResponse.json({ error: "charak dir :p" }, { status: 401 });
     }

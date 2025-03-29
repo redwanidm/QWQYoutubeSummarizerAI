@@ -7,7 +7,6 @@ const Contact = () => {
   return (
     <Layout>
     <div className="min-h-screen flex flex-col bg-base-100 relative overflow-hidden">
-      {/* Background gradient effects */}
       <div className="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-primary/20 via-base-100 to-base-100 -z-10" />
       <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full bg-primary/10 blur-[100px] -z-10" />
       
@@ -22,7 +21,6 @@ const Contact = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl mx-auto">
-          {/* Gmail Card */}
           <div className="card bg-base-200 shadow-xl transition-all duration-300  ">
             <div className="card-body items-center text-center">
               <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
@@ -43,7 +41,6 @@ const Contact = () => {
             </div>
           </div>
           
-          {/* Discord Card */}
           <div className="card bg-base-200 shadow-xl transition-all duration-300  ">
             <div className="card-body items-center text-center">
               <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
@@ -65,7 +62,6 @@ const Contact = () => {
             </div>
           </div>
           
-          {/* Telegram Card */}
           <div className="card bg-base-200 shadow-xl transition-all duration-300   ">
             <div className="card-body items-center text-center">
               <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
@@ -87,19 +83,7 @@ const Contact = () => {
           </div>
         </div>
         
-        {/* <div className="mt-16 w-full max-w-3xl mx-auto bg-base-200 rounded-2xl p-8 text-center shadow-lg">
-          <h2 className="text-2xl font-bold mb-4">Support My Work</h2>
-          <p className="text-base-content mb-6">
-          If you enjoy what I do and want to support me, consider buying me a coffee!          </p>
-          <button 
-            className="btn btn-primary"
-            onClick={() => window.open("https://buymeacoffee.com/myprofile", "_blank")}
-          >
-
-               <p > Buy Me a Coffee </p> 
-
-          </button>
-        </div> */}
+      
       </main>
     </div>
       </Layout>
