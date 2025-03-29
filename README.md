@@ -3,13 +3,14 @@
 An AI-powered free YouTube summarizer that extracts key points from any public YouTube video in any language. Supports multilingual summarization and translation in Arabic, English, and French.
 
 <img src="public/opgraph-image.jpg" alt="Alt text" width="500"> 
+
 ## Features
 
 - **Any YouTube Video**: Works with any public YouTube video.
 - **AI-Powered Summarization**: Extracts key points automatically.
 - **Multilingual Support**: Summarizes videos in Arabic, English, or French.
 
-<img src="public/preview1.png" alt="preview1" width="500">
+<img src="public/preview1.png" alt="preview1" >
 ## Live Demo
 
 Check out the live demo here: [Live Demo](https://qwqtoolkit-68fg376ix-redouaneabdlhs-projects.vercel.app/)
