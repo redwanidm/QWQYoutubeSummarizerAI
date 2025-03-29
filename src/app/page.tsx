@@ -96,10 +96,11 @@ export default function Home() {
   useEffect(() => {
     const extractVideoId = (url: string) => {
       // console.log('url',url)
-
       const match =
-        url.match(/[?&]v=([^&]+)/) || url.match(/youtu\.be\/([^?]+)/);
-      return match ? match[1] : null;
+      url.match(/[?&]v=([^&]+)/) ||
+      url.match(/youtu\.be\/([^?&]+)(\?si=[^&]+)?/) ||
+      url.match(/youtu\.be\/([^?&]+)/);
+    return match ? match[1] : null;
     };
 
     const fetchVideoInfo = async () => {
