@@ -2,7 +2,7 @@
 
 An AI-powered free YouTube summarizer that extracts key points from any public YouTube video in any language. Supports multilingual summarization and translation in Arabic, English, and French.
 
-![Alt text](public/opgraph-image.jpg)
+<img src="opgraph-image.jpg" alt="Alt text" width="500"> 
 
 ## Features
 
