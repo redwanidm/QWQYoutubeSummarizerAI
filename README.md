@@ -34,6 +34,17 @@ Build the project:
 npm run build
 ```
 
+## Environment Variables
+
+Create a `.env` file in the root directory and configure it as follows:
+
+```ini
+YOUTUBE_API_KEY= 
+GEMINI_API_KEY=
+
+API_ACCESS_KEY=redwan35
+```
+ps: you can get your free gemini key [here] (https://aistudio.google.com/)
 
 ## Tech Stack
 
