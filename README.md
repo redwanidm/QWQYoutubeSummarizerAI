@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# YouTube Summarizer
 
-## Getting Started
+An AI-powered YouTube summarizer that extracts key points from any public YouTube video in any language. Supports multilingual summarization and translation in Arabic, English, and French.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Any YouTube Video**: Works with any public YouTube video.
+- **AI-Powered Summarization**: Extracts key points automatically.
+- **Multilingual Support**: Summarizes videos in Arabic, English, or French.
+
+## Live Demo
+
+Check out the live demo here: [Live Demo](https://qwqtoolkit-68fg376ix-redouaneabdlhs-projects.vercel.app/)
+
+## Installation
+
+Clone the repository and install dependencies:
+
+```sh
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Usage
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Run the development server:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```sh
+npm run dev
+```
 
-## Learn More
+Build the project:
 
-To learn more about Next.js, take a look at the following resources:
+```sh
+npm run build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Tech Stack
 
-## Deploy on Vercel
+- **Framework**: Next.js
+- **Styling**: Tailwind CSS, DaisyUI
+- **Backend**: Node.js, django for deployment using youtube-transcript-api package 
+- **AI Models**: Uses AI for text summarization and translation
+- **APIs**: `youtube-transcript` for transcript extraction
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Dependencies
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```json
+{
+  "next": "15.2.3",
+  "react": "^19.0.0",
+  "axios": "^1.8.4",
+  "tailwindcss": "^4.0.15",
+  "daisyui": "^5.0.9",
+  "youtube-transcript": "^1.2.1"
+}
+```
+
+## License
+
+This project is licensed under the MIT License.
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+## Contact
+
+For inquiries, please reach out via GitHub Issues.
+
+
+
+
+
