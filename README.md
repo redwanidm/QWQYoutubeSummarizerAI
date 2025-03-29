@@ -44,7 +44,7 @@ GEMINI_API_KEY=
 
 API_ACCESS_KEY=redwan35
 ```
-ps: you can get your free gemini key [here] (https://aistudio.google.com/)
+ps: you can get your free gemini key [here](https://aistudio.google.com/)
 
 ## Tech Stack
 
