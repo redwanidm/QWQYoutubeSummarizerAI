@@ -93,8 +93,8 @@ IMPORTANT:
                     }]
                 }],
                 generationConfig: {
-                    temperature: 0.7,
-                    maxOutputTokens: 2088
+                    temperature: 0.4,
+                    maxOutputTokens: 3000
                 }
             })
         });
