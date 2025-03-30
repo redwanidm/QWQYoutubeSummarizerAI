@@ -92,7 +92,7 @@ const Header: React.FC<HeaderProps> = ({ className }) => {
         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
         <li><Link href="/contact">Contact</Link></li>
     
-        <li><a>Feedback</a></li>
+      <li><Link href='https://github.com/redwanidm/QWQYoutubeSummarizerAI/'>Github</Link></li>
       </ul>
     </div>
     <Link href="/" className="btn btn-ghost text-xl px-2"> <div className='flex items-center justify-items-center'>
@@ -107,7 +107,7 @@ const Header: React.FC<HeaderProps> = ({ className }) => {
     <ul className="menu menu-horizontal px-1">
       <li><Link href="/contact">Contact</Link></li>
     
-      <li><a>Feedback</a></li>
+      <li><Link href='https://github.com/redwanidm/QWQYoutubeSummarizerAI/'>Github</Link></li>
     </ul>
   </div>
   <div className="navbar-end">
