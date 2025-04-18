@@ -56,7 +56,7 @@ Key Points: Directly extract the most significant, concrete information and take
     - Highlight critical conceptual shifts
     - Provide meaningful context for each section
     - Ensure comprehensive coverage of the entire video duration
-    - stay within 5-15 logical sections 
+    - stay within 5-25 logical sections 
 
 Required Output Format (MUST follow exactly):
 {
